@@ -15,6 +15,7 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
   const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -31,14 +32,20 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
     e.preventDefault();
     setAuthError('');
     setAuthLoading(true);
+    setShowEmailConfirmation(false);
 
     try {
       if (mode === 'login') {
         await signIn(formData.email, formData.password);
+        onAuthSuccess();
       } else {
-        await signUp(formData.email, formData.password, formData.name, formData.companyName, formData.role);
+        const result = await signUp(formData.email, formData.password, formData.name, formData.companyName, formData.role);
+        if (result.session) {
+          onAuthSuccess();
+        } else {
+          setShowEmailConfirmation(true);
+        }
       }
-      onAuthSuccess();
     } catch (error: any) {
       setAuthError(error.message || 'An error occurred');
     } finally {
@@ -136,6 +143,7 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
           onClose={onCloseAuthModal}
           error={authError}
           loading={authLoading}
+          showEmailConfirmation={showEmailConfirmation}
         />
       )}
     </>
@@ -151,6 +159,7 @@ interface AuthModalIntegratedProps {
   onClose: () => void;
   error: string;
   loading: boolean;
+  showEmailConfirmation?: boolean;
 }
 
 function AuthModalIntegrated({
@@ -162,6 +171,7 @@ function AuthModalIntegrated({
   onClose,
   error,
   loading,
+  showEmailConfirmation,
 }: AuthModalIntegratedProps) {
 
   const handleChange = (field: string, value: string) => {
@@ -197,6 +207,20 @@ function AuthModalIntegrated({
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {error}
+            </div>
+          )}
+
+          {showEmailConfirmation && (
+            <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg text-sm">
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <div>
+                  <p className="font-medium">Check your email</p>
+                  <p className="mt-1">A confirmation email has been sent to <strong>{formData.email}</strong>. Please check your inbox and click the confirmation link to activate your account.</p>
+                </div>
+              </div>
             </div>
           )}
 
