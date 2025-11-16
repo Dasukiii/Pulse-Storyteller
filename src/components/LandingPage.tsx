@@ -20,7 +20,7 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
     password: '',
     name: '',
     companyName: '',
-    role: 'HR Head',
+    role: '',
   });
 
   const handleLoginClick = () => {
@@ -163,7 +163,6 @@ function AuthModalIntegrated({
   error,
   loading,
 }: AuthModalIntegratedProps) {
-  const roles = ['HR Head', 'HRBP', 'People Analytics', 'BU Leader'];
 
   const handleChange = (field: string, value: string) => {
     onFormDataChange({ ...formData, [field]: value });
@@ -271,19 +270,15 @@ function AuthModalIntegrated({
               <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
                 Role <span className="text-red-500">*</span>
               </label>
-              <select
+              <input
+                type="text"
                 id="role"
                 value={formData.role}
                 onChange={(e) => handleChange('role', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="e.g., HR Manager, People Analytics Lead, etc."
                 required
-              >
-                {roles.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
           )}
 
