@@ -73,9 +73,9 @@ export function groupDataByTeam(data: any[]): TeamData[] {
 
     const promoters = scores.filter((s) => s >= 9).length;
     const detractors = scores.filter((s) => s <= 6).length;
-    const enpsScore = Math.round(
-      ((promoters - detractors) / responses.length) * 100
-    );
+    const promoterPercent = (promoters / responses.length) * 100;
+    const detractorPercent = (detractors / responses.length) * 100;
+    const enpsScore = Math.round(promoterPercent - detractorPercent);
 
     return {
       team,
@@ -121,7 +121,7 @@ export async function generateStoriesForTeams(
   const teamsAnalysisData = teamDataList.map((teamData) => {
     const promoters = teamData.scores.filter((s) => s >= 9).length;
     const passives = teamData.scores.filter((s) => s >= 7 && s < 9).length;
-    const detractors = teamData.scores.filter((s) => s < 7).length;
+    const detractors = teamData.scores.filter((s) => s <= 6).length;
     const total = teamData.responses.length;
 
     const promotersPercent = Math.round((promoters / total) * 1000) / 10;
