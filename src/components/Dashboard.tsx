@@ -371,9 +371,9 @@ export default function Dashboard({
                       Left (wide): RecentActivity (top) then Quick Actions (below)
                       Right (narrow): Upload button -> eNPS square -> Combined stats card
                   */}
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                  <div className="grid grid-cols-1 bg-orange-100 lg:grid-cols-3 gap-6 mb-8">
                     {/* LEFT: span 2 columns on large screens */}
-                    <div className="lg:col-span-2 bg-orange-100 space-y-6">
+                    <div className="lg:col-span-2 space-y-6">
                       <RecentActivity activities={activities} onViewAll={handleViewAllActivities} />
 
                       <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-md">
