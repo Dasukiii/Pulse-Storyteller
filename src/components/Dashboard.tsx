@@ -48,7 +48,7 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
       <div className="grid grid-cols-3 gap-4">
         {/* Total Responses */}
         <div className="bg-gray-50 rounded-xl p-4 h-44 flex flex-col">
-          <div className="text-sm text-gray-500 mb-2 whitespace-nowrap truncate">
+          <div className="text-sm text-gray-500 h-10">
             Total Responses
           </div>
 
@@ -67,7 +67,7 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
 
         {/* Teams Analyzed */}
         <div className="bg-gray-50 rounded-xl p-4 h-44 flex flex-col">
-          <div className="text-sm text-gray-500 mb-2 whitespace-nowrap truncate">
+          <div className="text-sm text-gray-500 h-10">
             Teams Analyzed
           </div>
 
@@ -82,7 +82,7 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
 
         {/* Stories Generated */}
         <div className="bg-gray-50 rounded-xl p-4 h-44 flex flex-col">
-          <div className="text-sm text-gray-500 mb-2 whitespace-nowrap truncate">
+          <div className="text-sm text-gray-500 h-10">
             AI Generated
           </div>
 
@@ -381,10 +381,10 @@ export default function Dashboard({
                         <div className="space-y-3">
                           <button
                             onClick={() => setActiveNav('stories')}
-                            className="w-full flex items-center gap-4 p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors text-left"
+                            className="w-full flex items-center gap-4 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors text-left"
                           >
-                            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                              <Sparkles className="w-6 h-6 text-purple-600" />
+                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                              <Sparkles className="w-6 h-6 text-blue-600" />
                             </div>
                             <div className="flex-1">
                               <p className="font-semibold text-gray-900">View Stories</p>
