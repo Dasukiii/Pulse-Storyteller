@@ -490,7 +490,7 @@ export default function DataValidationPage({
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart
                           data={statistics.teamStats}
-                          margin={{ top: 20, right: 10, left: -20, bottom: 0 }}
+                          margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
                         >
                           <CartesianGrid vertical={false} strokeDasharray="3 3" />
                           <XAxis
@@ -520,7 +520,7 @@ export default function DataValidationPage({
                               return null;
                             }}
                           />
-                          <Bar dataKey="count" fill="#3b82f6" radius={8}>
+                          <Bar dataKey="count" fill="#f97316" radius={8}>
                             <LabelList
                               position="top"
                               offset={8}
