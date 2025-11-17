@@ -225,7 +225,7 @@ function AuthModalIntegrated({
                 </svg>
                 <div>
                   <p className="font-medium">Check your email</p>
-                  <p className="mt-1">A confirmation email has been sent to <strong>{formData.email}</strong>. Please check your inbox and click the confirmation link to activate your account.</p>
+                  <p className="mt-1">Confirmation email has been sent to <strong>{formData.email}</strong>. Click the confirmation link to activate your account.</p>
                 </div>
               </div>
             </div>
