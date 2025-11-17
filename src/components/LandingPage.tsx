@@ -55,8 +55,15 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700">
-        <header className="container mx-auto px-4 py-6">
+      {/* Google Font Import and Body Style */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap');
+        body {
+          font-family: 'Figtree', sans-serif;
+        }
+      `}</style>
+      <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 font-figtree">
+        <header className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <BarChart3 className="w-8 h-8 text-white" />
@@ -66,7 +73,7 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
             </div>
             <button
               onClick={handleLoginClick}
-              className="flex items-center gap-2 bg-white text-blue-600 hover:bg-blue-50 font-semibold px-6 py-2.5 rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
+              className="flex items-center gap-2 bg-white text-blue-600 hover:bg-blue-50 font-semibold px-6 py-2.5 rounded-xl shadow-lg transition-all duration-200 hover:scale-105"
             >
               <LogIn className="w-4 h-4" />
               Login
@@ -74,10 +81,10 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
           </div>
         </header>
 
-        <div className="container mx-auto px-4 py-20">
+        <div className="container mx-auto px-4 py-24 md:py-32">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-20">
-              <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+              <h2 className="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
                 Turn eNPS Data Into<br />Actionable Stories
               </h2>
               <p className="text-xl md:text-2xl text-blue-100 mb-12 max-w-3xl mx-auto">
@@ -85,7 +92,7 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
               </p>
               <button
                 onClick={onGetStarted}
-                className="inline-flex items-center gap-3 bg-white text-blue-600 hover:bg-blue-50 font-bold text-xl px-12 py-5 rounded-xl shadow-2xl transition-all duration-200 hover:scale-105 hover:shadow-3xl"
+                className="inline-flex items-center gap-3 bg-white text-blue-600 hover:bg-blue-50 font-bold text-xl px-12 py-5 rounded-xl shadow-2xl transition-all duration-200 hover:scale-105 hover:shadow-xl"
               >
                 Get Started
                 <ArrowRight className="w-6 h-6" />
@@ -134,7 +141,7 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
       </div>
 
       {showAuthModal && (
-        <AuthModalIntegrated
+        <AuthModal
           mode={mode}
           formData={formData}
           onFormDataChange={setFormData}
