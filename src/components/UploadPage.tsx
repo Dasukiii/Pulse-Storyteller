@@ -268,7 +268,7 @@ export default function UploadPage({ userId, onUploadComplete }: UploadPageProps
             </p>
           </div>
           <div>
-            <h4 className="font-semibold text-gray-900 mb-2">Required Columns</h4>
+            <h4 className="font-semibold text-gray-900 mb-2">Recommended Columns</h4>
             <div className="flex flex-wrap gap-2">
               {['Employee_ID', 'Team', 'Score', 'Comments', 'Date'].map((col) => (
                 <span
