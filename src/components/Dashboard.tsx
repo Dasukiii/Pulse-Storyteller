@@ -47,7 +47,7 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
 
       <div className="grid grid-cols-3 gap-4">
         {/* Total Responses */}
-        <div className="bg-gray-50 rounded-xl p-4 h-44 flex flex-col">
+        <div className="bg-yellow-50 rounded-xl p-4 h-44 flex flex-col">
           <div className="text-sm text-gray-500 h-10">
             Total Responses
           </div>
