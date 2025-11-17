@@ -170,7 +170,7 @@ export default function UploadPage({ userId, onUploadComplete }: UploadPageProps
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Upload Survey Data</h2>
         <p className="text-gray-600">
-          Upload your eNPS or pulse survey results to generate insights and stories
+          Upload your survey results to generate actions and stories
         </p>
       </div>
 
@@ -259,9 +259,6 @@ export default function UploadPage({ userId, onUploadComplete }: UploadPageProps
             <FileText className="w-5 h-5 text-blue-600" />
             Instructions
           </CardTitle>
-          <CardDescription>
-            Follow these guidelines to ensure your data is processed correctly
-          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
