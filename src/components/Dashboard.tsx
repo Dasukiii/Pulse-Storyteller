@@ -384,7 +384,7 @@ export default function Dashboard({
                             className="w-full flex items-center gap-4 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors text-left"
                           >
                             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                              <Sparkles className="w-6 h-6 text-blue-600" />
+                              <Sparkles className="w-6 h-6 text-purple-600" />
                             </div>
                             <div className="flex-1">
                               <p className="font-semibold text-gray-900">View Stories</p>
