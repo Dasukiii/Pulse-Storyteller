@@ -42,12 +42,12 @@ interface Activity {
 
 function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-md">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Overview</h3>
 
       <div className="grid grid-cols-3 gap-4">
         {/* Total Responses */}
-        <div className="bg-gray-50 rounded-lg p-4 h-40 flex flex-col">
+        <div className="bg-gray-50 rounded-xl p-4 h-44 flex flex-col">
           <div className="text-sm text-gray-500 mb-2 whitespace-nowrap truncate">
             Total Responses
           </div>
@@ -66,7 +66,7 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
         </div>
 
         {/* Teams Analyzed */}
-        <div className="bg-gray-50 rounded-lg p-4 h-40 flex flex-col">
+        <div className="bg-gray-50 rounded-xl p-4 h-44 flex flex-col">
           <div className="text-sm text-gray-500 mb-2 whitespace-nowrap truncate">
             Teams Analyzed
           </div>
@@ -81,7 +81,7 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
         </div>
 
         {/* Stories Generated */}
-        <div className="bg-gray-50 rounded-lg p-4 h-40 flex flex-col">
+        <div className="bg-gray-50 rounded-xl p-4 h-44 flex flex-col">
           <div className="text-sm text-gray-500 mb-2 whitespace-nowrap truncate">
             AI Generated
           </div>
@@ -312,7 +312,7 @@ export default function Dashboard({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 font-figtree">
         <DashboardHeader
           userName={userName}
           userEmail={userEmail}
@@ -332,193 +332,203 @@ export default function Dashboard({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <DashboardHeader
-        userName={userName}
-        userEmail={userEmail}
-        userRole={userRole}
-        activeNav={activeNav}
-        onNavChange={setActiveNav}
-        onLogout={onLogout}
-      />
+    <>
+      {/* Google Font Import and Body Style */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap');
+        body {
+          font-family: 'Figtree', sans-serif;
+        }
+      `}</style>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeNav === 'dashboard' && (
-          <>
-            {!hasData ? (
-              <EmptyState onUploadClick={handleUploadClick} />
-            ) : (
-              <>
-                <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                    Welcome back, {userName}
-                  </h2>
-                  <p className="text-gray-600">
-                    Here's an overview of your employee pulse data and insights.
-                  </p>
-                </div>
+      <div className="min-h-screen bg-gray-50">
+        <DashboardHeader
+          userName={userName}
+          userEmail={userEmail}
+          userRole={userRole}
+          activeNav={activeNav}
+          onNavChange={setActiveNav}
+          onLogout={onLogout}
+        />
 
-                {/* Two-column layout:
-                    Left (wide): RecentActivity (top) then Quick Actions (below)
-                    Right (narrow): Upload button -> eNPS square -> Combined stats card
-                */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                  {/* LEFT: span 2 columns on large screens */}
-                  <div className="lg:col-span-2 space-y-6">
-                    <RecentActivity activities={activities} onViewAll={handleViewAllActivities} />
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {activeNav === 'dashboard' && (
+            <>
+              {!hasData ? (
+                <EmptyState onUploadClick={handleUploadClick} />
+              ) : (
+                <>
+                  <div className="mb-8">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                      Welcome back, {userName}
+                    </h2>
+                    <p className="text-gray-600">
+                      Here's an overview of your employee pulse data and insights.
+                    </p>
+                  </div>
 
-                    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                      <div className="space-y-3">
-                        <button
-                          onClick={() => setActiveNav('stories')}
-                          className="w-full flex items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-left"
-                        >
-                          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
-                            📊
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium text-gray-900">View Stories</p>
-                            <p className="text-sm text-gray-500">
-                              See AI-generated insights
-                            </p>
-                          </div>
-                        </button>
+                  {/* Two-column layout:
+                      Left (wide): RecentActivity (top) then Quick Actions (below)
+                      Right (narrow): Upload button -> eNPS square -> Combined stats card
+                  */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    {/* LEFT: span 2 columns on large screens */}
+                    <div className="lg:col-span-2 space-y-6">
+                      <RecentActivity activities={activities} onViewAll={handleViewAllActivities} />
 
-                        {/* You can add more quick action buttons here */}
+                      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-md">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                        <div className="space-y-3">
+                          <button
+                            onClick={() => setActiveNav('stories')}
+                            className="w-full flex items-center gap-4 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors text-left"
+                          >
+                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                              <Sparkles className="w-6 h-6 text-blue-600" />
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-semibold text-gray-900">View Stories</p>
+                              <p className="text-sm text-gray-500">
+                                See AI-generated insights
+                              </p>
+                            </div>
+                          </button>
+
+                          {/* You can add more quick action buttons here */}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* RIGHT: Upload button, eNPS, Combined stats */}
-                  <div className="flex flex-col space-y-6">
-                    <button
-                      onClick={handleUploadClick}
-                      className="w-full inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 py-4 rounded-xl shadow-lg transition-all duration-200 hover:scale-105"
-                    >
-                      <Upload className="w-5 h-5" />
-                      Upload New Survey Data
-                    </button>
+                    {/* RIGHT: Upload button, eNPS, Combined stats */}
+                    <div className="flex flex-col space-y-6">
+                      <button
+                        onClick={handleUploadClick}
+                        className="w-full inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 py-4 rounded-xl shadow-lg transition-all duration-200 hover:shadow-xl"
+                      >
+                        <Upload className="w-5 h-5" />
+                        Upload New Survey Data
+                      </button>
 
-                    <div>
-                      {stats?.currentEnpsScore !== null ? (
-                        <EnpsScoreCard score={stats.currentEnpsScore || 0} />
-                      ) : (
-                        <StatCard
-                          title="Current eNPS Score"
-                          value="N/A"
-                          icon={Sparkles}
-                          iconColor="text-blue-600"
-                          iconBgColor="bg-blue-50"
-                          description="Upload data to see score"
-                        />
-                      )}
+                      <div>
+                        {stats?.currentEnpsScore !== null ? (
+                          <EnpsScoreCard score={stats.currentEnpsScore || 0} />
+                        ) : (
+                          <StatCard
+                            title="Current eNPS Score"
+                            value="N/A"
+                            icon={Sparkles}
+                            iconColor="text-blue-600"
+                            iconBgColor="bg-blue-50"
+                            description="Upload data to see score"
+                          />
+                        )}
+                      </div>
+
+                      <CombinedStatsCard stats={stats} />
                     </div>
-
-                    <CombinedStatsCard stats={stats} />
                   </div>
-                </div>
-              </>
-            )}
-          </>
-        )}
-
-        {activeNav === 'upload' && (
-          <UploadPage userId={userId} onUploadComplete={handleUploadComplete} />
-        )}
-
-        {activeNav === 'validation' && currentUploadId && !generatingStories && (
-          <DataValidationPage
-            uploadId={currentUploadId}
-            onValidationComplete={handleValidationComplete}
-          />
-        )}
-
-        {generatingStories && (
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl border border-gray-200 p-12 shadow-sm text-center">
-              <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Generating Your Stories</h2>
-              <p className="text-gray-600 mb-8">
-                Our AI is analyzing your data and creating personalized insights for all teams. This may take a minute...
-              </p>
-
-              {generationProgress && (
-                <div className="mb-8">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700">{generationProgress.message}</span>
-                    <span className="text-sm text-gray-500">{generationProgress.current}/{generationProgress.total}</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div
-                      className="bg-blue-600 h-2.5 rounded-full transition-all duration-500"
-                      style={{ width: `${(generationProgress.current / generationProgress.total) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
+                </>
               )}
+            </>
+          )}
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-center text-sm text-gray-500">
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
-                  Analyzing eNPS scores
-                </div>
-                <div className="flex items-center justify-center text-sm text-gray-500">
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
-                  Processing comments and feedback
-                </div>
-                <div className="flex items-center justify-center text-sm text-gray-500">
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
-                  Identifying key themes and patterns
-                </div>
-                <div className="flex items-center justify-center text-sm text-gray-500">
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
-                  Generating narratives and insights
+          {activeNav === 'upload' && (
+            <UploadPage userId={userId} onUploadComplete={handleUploadComplete} />
+          )}
+
+          {activeNav === 'validation' && currentUploadId && !generatingStories && (
+            <DataValidationPage
+              uploadId={currentUploadId}
+              onValidationComplete={handleValidationComplete}
+            />
+          )}
+
+          {generatingStories && (
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-white rounded-xl border border-gray-200 p-12 shadow-md text-center">
+                <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Generating Your Stories</h2>
+                <p className="text-gray-600 mb-8">
+                  Our AI is analyzing your data and creating personalized insights for all teams. This may take a minute...
+                </p>
+
+                {generationProgress && (
+                  <div className="mb-8">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-gray-700">{generationProgress.message}</span>
+                      <span className="text-sm text-gray-500">{generationProgress.current}/{generationProgress.total}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                      <div
+                        className="bg-blue-600 h-2.5 rounded-full transition-all duration-500"
+                        style={{ width: `${(generationProgress.current / generationProgress.total) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-3">
+                  <div className="flex items-center justify-center text-sm text-gray-500">
+                    <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
+                    Analyzing eNPS scores
+                  </div>
+                  <div className="flex items-center justify-center text-sm text-gray-500">
+                    <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
+                    Processing comments and feedback
+                  </div>
+                  <div className="flex items-center justify-center text-sm text-gray-500">
+                    <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
+                    Identifying key themes and patterns
+                  </div>
+                  <div className="flex items-center justify-center text-sm text-gray-500">
+                    <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
+                    Generating narratives and insights
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {generationError && !generatingStories && (
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl border border-red-200 p-8 shadow-sm">
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                    <AlertCircle className="w-6 h-6 text-red-600" />
+          {generationError && !generatingStories && (
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-white rounded-xl border border-red-200 p-8 shadow-md">
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                      <AlertCircle className="w-6 h-6 text-red-600" />
+                    </div>
                   </div>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Story Generation Failed</h3>
-                  <p className="text-gray-600 mb-4">{generationError}</p>
-                  <div className="flex space-x-3">
-                    <button
-                      onClick={() => setActiveNav('validation')}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Try Again
-                    </button>
-                    <button
-                      onClick={() => {
-                        setGenerationError(null);
-                        setActiveNav('dashboard');
-                      }}
-                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-                    >
-                      Back to Dashboard
-                    </button>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Story Generation Failed</h3>
+                    <p className="text-gray-600 mb-4">{generationError}</p>
+                    <div className="flex space-x-3">
+                      <button
+                        onClick={() => setActiveNav('validation')}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      >
+                        Try Again
+                      </button>
+                      <button
+                        onClick={() => {
+                          setGenerationError(null);
+                          setActiveNav('dashboard');
+                        }}
+                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                      >
+                        Back to Dashboard
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeNav === 'stories' && <StoriesPage />}
+          {activeNav === 'stories' && <StoriesPage />}
 
-        {activeNav === 'activity' && <ActivityPage onBack={() => setActiveNav('dashboard')} />}
-      </main>
-    </div>
+          {activeNav === 'activity' && <ActivityPage onBack={() => setActiveNav('dashboard')} />}
+        </main>
+      </div>
+    </>
   );
 }
