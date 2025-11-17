@@ -47,7 +47,7 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
 
       <div className="grid grid-cols-3 gap-4">
         {/* Total Responses */}
-        <div className="bg-orange-100 rounded-xl p-4 h-44 flex flex-col">
+        <div className="bg-orange-150 rounded-xl p-4 h-44 flex flex-col">
           <div className="text-sm text-gray-500 h-10">
             Total Responses
           </div>
@@ -66,7 +66,7 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
         </div>
 
         {/* Teams Analyzed */}
-        <div className="bg-orange-100 rounded-xl p-4 h-44 flex flex-col">
+        <div className="bg-orange-150 rounded-xl p-4 h-44 flex flex-col">
           <div className="text-sm text-gray-500 h-10">
             Teams Analyzed
           </div>
@@ -81,7 +81,7 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
         </div>
 
         {/* Stories Generated */}
-        <div className="bg-orange-100 rounded-xl p-4 h-44 flex flex-col">
+        <div className="bg-orange-150 rounded-xl p-4 h-44 flex flex-col">
           <div className="text-sm text-gray-500 h-10">
             AI Generated
           </div>
