@@ -2,6 +2,7 @@ import { ArrowRight, LogIn, BarChart3 } from 'lucide-react';
 import AuthModal from './AuthModal';
 import { useAuth } from '../hooks/useAuth';
 import { useState } from 'react';
+import kadoshIcon from '../kadosh-ai-icon.png';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -350,7 +351,7 @@ function AuthModalIntegrated({
           >
             By
             <img 
-              src="/kadosh-ai-icon.png" // This path assumes your icon is in the 'public' folder
+              src={kadoshIcon} // This path assumes your icon is in the 'public' folder
               alt="Kadosh AI" 
               className="w-5 h-5" // You can adjust the size here
             />
