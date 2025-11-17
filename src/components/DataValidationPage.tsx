@@ -307,17 +307,17 @@ export default function DataValidationPage({
           </CardContent>
         </Card>
 
-        {allRequiredMapped && validationResult?.isValid && (
+        {hasAtLeastOneMapping && validationResult?.isValid && (
             <Card className="mb-6 border-green-200 bg-green-50 rounded-xl shadow-md">
             <CardContent className="pt-6">
                 <div className="flex items-center gap-3">
                 <CheckCircle2 className="w-6 h-6 text-green-600" />
                 <div>
                     <p className="font-semibold text-green-900">
-                    Data validation successful!
+                    Data ready for processing!
                     </p>
                     <p className="text-sm text-green-700 mt-1">
-                    All {rawData.length} rows passed validation. Ready to proceed to
+                    All {rawData.length} rows will be processed. Ready to proceed to
                     analysis.
                     </p>
                 </div>
