@@ -202,10 +202,10 @@ export default function OnboardingWizard({ userId, onComplete }: OnboardingWizar
                 <div className="space-y-8">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
-                    Let's personalize your experience
+                    Personalize your experience
                     </h1>
                     <p className="text-slate-600 text-lg">
-                    Answer 3 quick questions to get better AI insights (takes 30 seconds)
+                    Answer 3 quick questions to get better AI insights (30 seconds)
                     </p>
                 </div>
 
@@ -242,7 +242,7 @@ export default function OnboardingWizard({ userId, onComplete }: OnboardingWizar
 
                 <div>
                     <h2 className="text-xl font-semibold text-slate-900 mb-6">
-                    What's your biggest challenge with employee engagement right now?
+                    What's your No.1 biggest challenge with employee engagement right now?
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {challenges.map((option) => (
@@ -273,7 +273,7 @@ export default function OnboardingWizard({ userId, onComplete }: OnboardingWizar
 
                 <div>
                     <h2 className="text-xl font-semibold text-slate-900 mb-6">
-                    What type of action plans work best for your organization?
+                    Choose one action plans work best for your organization.
                     </h2>
                     <div className="grid grid-cols-1 gap-4">
                     {actionPlans.map((option) => (
