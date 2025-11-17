@@ -374,7 +374,7 @@ export default function Dashboard({
                           onClick={() => setActiveNav('stories')}
                           className="w-full flex items-center gap-3 p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors text-left"
                         >
-                          <div className="w-10 h-10 bg-purple-150 rounded-lg flex items-center justify-center text-xl">
+                          <div className="w-10 h-10 bg-purple-200 rounded-lg flex items-center justify-center text-xl">
                             📊
                           </div>
                           <div className="flex-1">
