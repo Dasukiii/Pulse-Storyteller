@@ -200,7 +200,7 @@ export default function UploadPage({ userId, onUploadComplete }: UploadPageProps
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <div className="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                        <FileText className="w-5 h-5 text-blue-600" />
+                        <FileText className="w-5 h-5 text-green-600" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-900 truncate">{upload.file_name}</p>
