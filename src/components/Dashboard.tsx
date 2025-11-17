@@ -381,7 +381,7 @@ export default function Dashboard({
                         <div className="space-y-3">
                           <button
                             onClick={() => setActiveNav('stories')}
-                            className="w-full flex items-center gap-4 p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors text-left"
+                            className="w-full flex items-center gap-4 p-4 bg-purple-50 hover:bg-purple-150 rounded-xl transition-colors text-left"
                           >
                             <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                               <Sparkles className="w-6 h-6 text-purple-600" />
