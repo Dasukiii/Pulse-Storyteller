@@ -352,7 +352,7 @@ function AuthModalIntegrated({
             <img 
               src="kadosh-ai-icon.png" // This path assumes your icon is in the 'public' folder
               alt="Kadosh AI" 
-              className="w-20 h-20" // You can adjust the size here
+              className="w-5 h-5" // You can adjust the size here
             />
           </a>
         </div>
