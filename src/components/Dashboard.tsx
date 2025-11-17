@@ -376,7 +376,7 @@ export default function Dashboard({
                     <div className="lg:col-span-2 space-y-6">
                       <RecentActivity activities={activities} onViewAll={handleViewAllActivities} />
 
-                      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-md">
+                      <div className="bg-orange rounded-xl border border-gray-200 p-6 shadow-md">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                         <div className="space-y-3">
                           <button
