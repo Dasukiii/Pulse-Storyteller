@@ -345,7 +345,7 @@ function AuthModalIntegrated({
           </div>
           <div className="text-center pt-4 pb-6"> 
           <a 
-            href="#" // You can change this link to your AI's website
+            href="https://kadoshai.com/" // You can change this link to your AI's website
             className="flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
           >
             By
