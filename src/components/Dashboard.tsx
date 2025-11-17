@@ -372,9 +372,9 @@ export default function Dashboard({
                       <div className="space-y-3">
                         <button
                           onClick={() => setActiveNav('stories')}
-                          className="w-full flex items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-left"
+                          className="w-full flex items-center gap-3 p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors text-left"
                         >
-                          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
+                          <div className="w-10 h-10 bg-purplr-100 rounded-lg flex items-center justify-center text-xl">
                             📊
                           </div>
                           <div className="flex-1">
