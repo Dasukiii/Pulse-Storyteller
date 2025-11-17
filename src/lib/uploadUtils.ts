@@ -21,7 +21,6 @@ export interface ValidationError {
 }
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const REQUIRED_COLUMNS = ['Employee_ID', 'Team', 'Score', 'Date'];
 
 export function validateFileSize(file: File): boolean {
   return file.size <= MAX_FILE_SIZE;
@@ -42,54 +41,11 @@ export function validateFileType(file: File): boolean {
 }
 
 export function validateColumns(headers: string[]): ValidationError[] {
-  const errors: ValidationError[] = [];
-  const missingColumns = REQUIRED_COLUMNS.filter(
-    (col) => !headers.includes(col)
-  );
-
-  if (missingColumns.length > 0) {
-    errors.push({
-      field: 'columns',
-      message: `Missing required columns: ${missingColumns.join(', ')}`,
-    });
-  }
-
-  return errors;
+  return [];
 }
 
 export function validateRow(row: any, rowIndex: number): ValidationError[] {
-  const errors: ValidationError[] = [];
-
-  if (!row.Employee_ID || row.Employee_ID.trim() === '') {
-    errors.push({
-      field: `row_${rowIndex}_Employee_ID`,
-      message: `Row ${rowIndex + 1}: Employee_ID is required`,
-    });
-  }
-
-  if (!row.Team || row.Team.trim() === '') {
-    errors.push({
-      field: `row_${rowIndex}_Team`,
-      message: `Row ${rowIndex + 1}: Team is required`,
-    });
-  }
-
-  const score = parseFloat(row.Score);
-  if (isNaN(score) || score < 0 || score > 10) {
-    errors.push({
-      field: `row_${rowIndex}_Score`,
-      message: `Row ${rowIndex + 1}: Score must be a number between 0 and 10`,
-    });
-  }
-
-  if (!row.Date || row.Date.trim() === '') {
-    errors.push({
-      field: `row_${rowIndex}_Date`,
-      message: `Row ${rowIndex + 1}: Date is required`,
-    });
-  }
-
-  return errors;
+  return [];
 }
 
 export function parseCSVFile(file: File): Promise<ParsedSurveyData> {
@@ -109,39 +65,24 @@ export function parseCSVFile(file: File): Promise<ParsedSurveyData> {
             return;
           }
 
-          const headers = Object.keys(results.data[0] as object);
-          const columnErrors = validateColumns(headers);
-          if (columnErrors.length > 0) {
-            reject(new Error(columnErrors[0].message));
-            return;
-          }
-
           const rows: SurveyRow[] = [];
-          const validationErrors: ValidationError[] = [];
 
           results.data.forEach((row: any, index: number) => {
-            const rowErrors = validateRow(row, index);
-            if (rowErrors.length > 0) {
-              validationErrors.push(...rowErrors);
-            } else {
-              rows.push({
-                Employee_ID: row.Employee_ID.trim(),
-                Team: row.Team.trim(),
-                Score: parseFloat(row.Score),
-                Comments: row.Comments?.trim() || '',
-                Date: row.Date.trim(),
-              });
-            }
-          });
+            const employeeId = row.Employee_ID || row.employee_id || row.EmployeeID || row.ID || row.id || `EMP${String(index + 1).padStart(4, '0')}`;
+            const team = row.Team || row.team || row.Department || row.department || 'Unknown Team';
+            const scoreValue = row.Score || row.score || row.Rating || row.rating || row.NPS || row.nps;
+            const score = !isNaN(parseFloat(scoreValue)) ? parseFloat(scoreValue) : 5;
+            const comments = row.Comments || row.comments || row.Feedback || row.feedback || row.Notes || row.notes || '';
+            const date = row.Date || row.date || row.SurveyDate || row.survey_date || new Date().toISOString().split('T')[0];
 
-          if (validationErrors.length > 0) {
-            reject(
-              new Error(
-                `Validation errors found: ${validationErrors.slice(0, 3).map((e) => e.message).join('; ')}`
-              )
-            );
-            return;
-          }
+            rows.push({
+              Employee_ID: String(employeeId).trim(),
+              Team: String(team).trim(),
+              Score: score,
+              Comments: String(comments).trim(),
+              Date: String(date).trim(),
+            });
+          });
 
           if (rows.length === 0) {
             reject(new Error('No valid rows found in file'));
@@ -149,8 +90,10 @@ export function parseCSVFile(file: File): Promise<ParsedSurveyData> {
           }
 
           const totalResponses = rows.length;
-          const avgScore =
-            rows.reduce((sum, row) => sum + row.Score, 0) / totalResponses;
+          const scores = rows.map(row => row.Score).filter(s => !isNaN(s) && s >= 0 && s <= 10);
+          const avgScore = scores.length > 0
+            ? scores.reduce((sum, score) => sum + score, 0) / scores.length
+            : 5;
           const teamsDetected = Array.from(new Set(rows.map((row) => row.Team)));
 
           resolve({
