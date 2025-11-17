@@ -40,21 +40,31 @@ interface Activity {
   type: 'upload' | 'story' | 'action';
 }
 
+/**
+ * Font stack: Prefer Lota Grotesque if you add it to your app (index.html),
+ * otherwise fall back to Inter and system sans.
+ *
+ * To load Lota Grotesque (optional), add to public/index.html:
+ * <link href="https://fonts.cdnfonts.com/css/lota-grotesque" rel="stylesheet">
+ */
+const FONT_STACK =
+  "Lota Grotesque, Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans'";
+
 function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Overview</h3>
+    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+      <h3 className="text-lg font-semibold text-slate-900 mb-4">Overview</h3>
 
       <div className="grid grid-cols-3 gap-4">
         {/* Total Responses */}
-        <div className="bg-gray-50 rounded-lg p-4 h-40 flex flex-col">
+        <div className="bg-gray-50 rounded-xl p-4 h-44 flex flex-col">
           <div className="text-sm text-gray-500 mb-2 whitespace-nowrap truncate">
             Total Responses
           </div>
 
           {/* center area that keeps number aligned across all boxes */}
           <div className="flex-1 flex items-center justify-center">
-            <div className="text-2xl md:text-3xl font-bold text-gray-900">
+            <div className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">
               {stats?.totalResponses ?? 'N/A'}
             </div>
           </div>
@@ -66,13 +76,13 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
         </div>
 
         {/* Teams Analyzed */}
-        <div className="bg-gray-50 rounded-lg p-4 h-40 flex flex-col">
+        <div className="bg-gray-50 rounded-xl p-4 h-44 flex flex-col">
           <div className="text-sm text-gray-500 mb-2 whitespace-nowrap truncate">
             Teams Analyzed
           </div>
 
           <div className="flex-1 flex items-center justify-center">
-            <div className="text-2xl md:text-3xl font-bold text-gray-900">
+            <div className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">
               {stats?.teamsAnalyzed ?? 'N/A'}
             </div>
           </div>
@@ -81,13 +91,13 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
         </div>
 
         {/* Stories Generated */}
-        <div className="bg-gray-50 rounded-lg p-4 h-40 flex flex-col">
+        <div className="bg-gray-50 rounded-xl p-4 h-44 flex flex-col">
           <div className="text-sm text-gray-500 mb-2 whitespace-nowrap truncate">
             AI Generated
           </div>
 
           <div className="flex-1 flex items-center justify-center">
-            <div className="text-2xl md:text-3xl font-bold text-gray-900">
+            <div className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">
               {stats?.storiesGenerated ?? 'N/A'}
             </div>
           </div>
@@ -98,7 +108,6 @@ function CombinedStatsCard({ stats }: { stats: DashboardStats | null }) {
     </div>
   );
 }
-
 
 export default function Dashboard({
   userId,
@@ -312,7 +321,7 @@ export default function Dashboard({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50" style={{ fontFamily: FONT_STACK }}>
         <DashboardHeader
           userName={userName}
           userEmail={userEmail}
@@ -332,7 +341,7 @@ export default function Dashboard({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white" style={{ fontFamily: FONT_STACK }}>
       <DashboardHeader
         userName={userName}
         userEmail={userEmail}
@@ -342,7 +351,7 @@ export default function Dashboard({
         onLogout={onLogout}
       />
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {activeNav === 'dashboard' && (
           <>
             {!hasData ? (
@@ -350,10 +359,10 @@ export default function Dashboard({
             ) : (
               <>
                 <div className="mb-8">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                  <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight">
                     Welcome back, {userName}
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-slate-600 max-w-2xl">
                     Here's an overview of your employee pulse data and insights.
                   </p>
                 </div>
@@ -367,25 +376,23 @@ export default function Dashboard({
                   <div className="lg:col-span-2 space-y-6">
                     <RecentActivity activities={activities} onViewAll={handleViewAllActivities} />
 
-                    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                      <h3 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h3>
                       <div className="space-y-3">
                         <button
                           onClick={() => setActiveNav('stories')}
-                          className="w-full flex items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-left"
+                          className="w-full flex items-center gap-3 p-4 bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-50 rounded-lg transition-all text-left border border-transparent hover:shadow"
                         >
                           <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-xl">
                             📊
                           </div>
                           <div className="flex-1">
-                            <p className="font-medium text-gray-900">View Stories</p>
-                            <p className="text-sm text-gray-500">
+                            <p className="font-medium text-slate-900">View Stories</p>
+                            <p className="text-sm text-slate-500">
                               See AI-generated insights
                             </p>
                           </div>
                         </button>
-
-                        {/* You can add more quick action buttons here */}
                       </div>
                     </div>
                   </div>
@@ -394,7 +401,7 @@ export default function Dashboard({
                   <div className="flex flex-col space-y-6">
                     <button
                       onClick={handleUploadClick}
-                      className="w-full inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 py-4 rounded-xl shadow-lg transition-all duration-200 hover:scale-105"
+                      className="w-full inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-6 py-4 rounded-2xl shadow-md transition-all duration-200 transform hover:-translate-y-0.5"
                     >
                       <Upload className="w-5 h-5" />
                       Upload New Survey Data
@@ -436,18 +443,18 @@ export default function Dashboard({
 
         {generatingStories && (
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl border border-gray-200 p-12 shadow-sm text-center">
+            <div className="bg-white rounded-2xl border border-gray-100 p-12 shadow-sm text-center">
               <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Generating Your Stories</h2>
-              <p className="text-gray-600 mb-8">
-                Our AI is analyzing your data and creating personalized insights for all teams. This may take a minute...
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Generating Your Stories</h2>
+              <p className="text-slate-600 mb-8">
+                Our AI is analyzing your data and creating personalized insights for all teams.
               </p>
 
               {generationProgress && (
                 <div className="mb-8">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700">{generationProgress.message}</span>
-                    <span className="text-sm text-gray-500">{generationProgress.current}/{generationProgress.total}</span>
+                    <span className="text-sm font-medium text-slate-700">{generationProgress.message}</span>
+                    <span className="text-sm text-slate-500">{generationProgress.current}/{generationProgress.total}</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2.5">
                     <div
@@ -458,22 +465,22 @@ export default function Dashboard({
                 </div>
               )}
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-center text-sm text-gray-500">
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
-                  Analyzing eNPS scores
+              <div className="space-y-3 text-sm text-slate-500">
+                <div className="flex items-center justify-center gap-2">
+                  <Sparkles className="w-4 h-4 text-blue-600" />
+                  <span>Analyzing eNPS scores</span>
                 </div>
-                <div className="flex items-center justify-center text-sm text-gray-500">
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
-                  Processing comments and feedback
+                <div className="flex items-center justify-center gap-2">
+                  <Sparkles className="w-4 h-4 text-blue-600" />
+                  <span>Processing comments and feedback</span>
                 </div>
-                <div className="flex items-center justify-center text-sm text-gray-500">
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
-                  Identifying key themes and patterns
+                <div className="flex items-center justify-center gap-2">
+                  <Sparkles className="w-4 h-4 text-blue-600" />
+                  <span>Identifying key themes and patterns</span>
                 </div>
-                <div className="flex items-center justify-center text-sm text-gray-500">
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-600" />
-                  Generating narratives and insights
+                <div className="flex items-center justify-center gap-2">
+                  <Sparkles className="w-4 h-4 text-blue-600" />
+                  <span>Generating narratives and insights</span>
                 </div>
               </div>
             </div>
@@ -482,16 +489,16 @@ export default function Dashboard({
 
         {generationError && !generatingStories && (
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-xl border border-red-200 p-8 shadow-sm">
+            <div className="bg-white rounded-2xl border border-red-100 p-8 shadow-sm">
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center">
                     <AlertCircle className="w-6 h-6 text-red-600" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Story Generation Failed</h3>
-                  <p className="text-gray-600 mb-4">{generationError}</p>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">Story Generation Failed</h3>
+                  <p className="text-slate-600 mb-4">{generationError}</p>
                   <div className="flex space-x-3">
                     <button
                       onClick={() => setActiveNav('validation')}
@@ -504,7 +511,7 @@ export default function Dashboard({
                         setGenerationError(null);
                         setActiveNav('dashboard');
                       }}
-                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                      className="px-4 py-2 bg-gray-50 text-slate-700 rounded-lg hover:bg-gray-100 transition-colors"
                     >
                       Back to Dashboard
                     </button>
