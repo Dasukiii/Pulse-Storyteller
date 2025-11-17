@@ -354,7 +354,6 @@ function AuthModalIntegrated({
               alt="Kadosh AI" 
               className="w-20 h-20" // You can adjust the size here
             />
-            <span className="font-semibold">Kadosh AI</span>
           </a>
         </div>
         </form>
