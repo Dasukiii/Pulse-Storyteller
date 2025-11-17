@@ -373,7 +373,7 @@ export default function Dashboard({
                   */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                     {/* LEFT: span 2 columns on large screens */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="lg:col-span-2 bg-orange-100 space-y-6">
                       <RecentActivity activities={activities} onViewAll={handleViewAllActivities} />
 
                       <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-md">
