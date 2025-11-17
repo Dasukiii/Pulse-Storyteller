@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
-import type { Story } from './types';
+import type { Story, Action } from './types';
 
-export function exportStoryAsPDF(story: Story): void {
+export function exportStoryAsPDF(story: Story, actions: Action[] = []): void {
   const pdf = new jsPDF();
   const pageWidth = pdf.internal.pageSize.getWidth();
   const margin = 20;
@@ -119,6 +119,75 @@ export function exportStoryAsPDF(story: Story): void {
 
   if (story.concerns && story.concerns.length > 0) {
     addSection('Areas of Concern', story.concerns, true);
+  }
+
+  if (actions && actions.length > 0) {
+    yPosition += 5;
+    addText('Recommended Actions', 14, true, [37, 99, 235]);
+    yPosition += 5;
+
+    actions.forEach((action, index) => {
+      if (yPosition > pdf.internal.pageSize.getHeight() - 40) {
+        pdf.addPage();
+        yPosition = 20;
+      }
+
+      pdf.setDrawColor(200, 200, 200);
+      pdf.setFillColor(248, 250, 252);
+      pdf.rect(margin, yPosition, maxWidth, 8, 'FD');
+
+      yPosition += 6;
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(30, 41, 59);
+      pdf.text(`${index + 1}. ${action.title}`, margin + 3, yPosition);
+
+      const priorityColor: [number, number, number] =
+        action.priority === 'high' ? [239, 68, 68] :
+        action.priority === 'medium' ? [234, 179, 8] :
+        [34, 197, 94];
+      pdf.setFontSize(9);
+      pdf.setTextColor(priorityColor[0], priorityColor[1], priorityColor[2]);
+      pdf.text(`[${action.priority.toUpperCase()}]`, maxWidth + margin - 20, yPosition, { align: 'right' });
+
+      yPosition += 5;
+
+      if (action.description) {
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(100, 100, 100);
+        const descLines = pdf.splitTextToSize(action.description, maxWidth - 6);
+        pdf.text(descLines, margin + 3, yPosition);
+        yPosition += descLines.length * 10 * 0.35 + 3;
+      }
+
+      if (action.effort || action.impact) {
+        pdf.setFontSize(9);
+        pdf.setTextColor(120, 120, 120);
+        const details = [];
+        if (action.effort) details.push(`Effort: ${action.effort}h`);
+        if (action.impact) details.push(`Impact: ${action.impact}`);
+        pdf.text(details.join(' • '), margin + 3, yPosition);
+        yPosition += 5;
+      }
+
+      if (action.action_items && action.action_items.length > 0) {
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setTextColor(60, 60, 60);
+        action.action_items.forEach((item) => {
+          const itemLines = pdf.splitTextToSize(`• ${item}`, maxWidth - 10);
+          if (yPosition + (itemLines.length * 10 * 0.35) > pdf.internal.pageSize.getHeight() - 20) {
+            pdf.addPage();
+            yPosition = 20;
+          }
+          pdf.text(itemLines, margin + 6, yPosition);
+          yPosition += itemLines.length * 10 * 0.35 + 2;
+        });
+      }
+
+      yPosition += 5;
+    });
   }
 
   if (story.quotes && story.quotes.length > 0) {

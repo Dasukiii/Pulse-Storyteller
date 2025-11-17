@@ -1,6 +1,9 @@
-import { X, Download, TrendingUp, TrendingDown, FileText, Calendar } from 'lucide-react';
-import type { Story, Upload } from '../lib/types';
+import { useState, useEffect } from 'react';
+import { X, Download, TrendingUp, TrendingDown, FileText, Calendar, Target, Clock, Zap } from 'lucide-react';
+import type { Story, Upload, Action } from '../lib/types';
 import { exportStoryAsPDF } from '../lib/pdfExport';
+import { getActionsByStoryId } from '../lib/data';
+import { supabase } from '../lib/supabase';
 
 interface StoryModalProps {
   story: Story;
@@ -10,6 +13,27 @@ interface StoryModalProps {
 }
 
 export default function StoryModal({ story, upload, onClose, onViewInterventions }: StoryModalProps) {
+  const [actions, setActions] = useState<Action[]>([]);
+  const [loadingActions, setLoadingActions] = useState(true);
+
+  useEffect(() => {
+    loadActions();
+  }, [story.id]);
+
+  const loadActions = async () => {
+    try {
+      setLoadingActions(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const storyActions = await getActionsByStoryId(user.id, story.id);
+        setActions(storyActions);
+      }
+    } catch (error) {
+      console.error('Failed to load actions:', error);
+    } finally {
+      setLoadingActions(false);
+    }
+  };
   const getSentimentColor = (sentiment: string | null) => {
     switch (sentiment) {
       case 'positive':
@@ -31,7 +55,20 @@ export default function StoryModal({ story, upload, onClose, onViewInterventions
   };
 
   const handleDownloadPDF = () => {
-    exportStoryAsPDF(story);
+    exportStoryAsPDF(story, actions);
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high':
+        return 'bg-red-100 text-red-800 border-red-200';
+      case 'medium':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'low':
+        return 'bg-green-100 text-green-800 border-green-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
   };
 
   return (
@@ -162,6 +199,61 @@ export default function StoryModal({ story, upload, onClose, onViewInterventions
                     </li>
                   ))}
                 </ul>
+              </section>
+            )}
+
+            {!loadingActions && actions.length > 0 && (
+              <section>
+                <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                  <Target className="w-5 h-5 text-blue-600" />
+                  Recommended Actions
+                </h3>
+                <div className="space-y-4">
+                  {actions.map((action) => (
+                    <div
+                      key={action.id}
+                      className="bg-white border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <h4 className="font-semibold text-slate-900 flex-1">{action.title}</h4>
+                        <span
+                          className={`px-2 py-1 text-xs font-medium rounded border ${getPriorityColor(
+                            action.priority
+                          )}`}
+                        >
+                          {action.priority.toUpperCase()}
+                        </span>
+                      </div>
+                      {action.description && (
+                        <p className="text-sm text-slate-600 mb-3">{action.description}</p>
+                      )}
+                      <div className="flex items-center gap-4 text-xs text-slate-500">
+                        {action.effort && (
+                          <div className="flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            <span>{action.effort}h effort</span>
+                          </div>
+                        )}
+                        {action.impact && (
+                          <div className="flex items-center gap-1">
+                            <Zap className="w-3 h-3" />
+                            <span>{action.impact} impact</span>
+                          </div>
+                        )}
+                      </div>
+                      {action.action_items && action.action_items.length > 0 && (
+                        <ul className="mt-3 space-y-1">
+                          {action.action_items.map((item, idx) => (
+                            <li key={idx} className="text-sm text-slate-600 flex items-start gap-2">
+                              <span className="text-blue-500 mt-0.5">•</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </section>
             )}
 
