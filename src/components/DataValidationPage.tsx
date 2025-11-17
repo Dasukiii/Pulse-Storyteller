@@ -112,10 +112,6 @@ export default function DataValidationPage({
   };
 
   const handleProceed = async () => {
-    if (!validationResult?.isValid) {
-      return;
-    }
-
     setSaving(true);
     setError(null);
 
@@ -186,9 +182,7 @@ export default function DataValidationPage({
     );
   }
 
-  const allRequiredMapped = systemFields
-    .filter((f) => f.required)
-    .every((f) => columnMapping[f.key]);
+  const hasAtLeastOneMapping = Object.values(columnMapping).some((v) => v !== null);
 
   return (
     <>
@@ -545,15 +539,20 @@ export default function DataValidationPage({
 
         <div className="flex items-center justify-end gap-4 mt-6">
           <div className="flex-1">
-            {!allRequiredMapped && (
+            {!hasAtLeastOneMapping && (
+              <p className="text-sm text-amber-600 font-medium">
+                Map at least one column to proceed. Default values will be used for unmapped fields.
+              </p>
+            )}
+            {hasAtLeastOneMapping && validationResult?.warnings && validationResult.warnings.length > 0 && (
               <p className="text-sm text-gray-600">
-                Please map all required fields to continue
+                {validationResult.warnings.length} recommendation(s) - Data will still be processed
               </p>
             )}
           </div>
           <button
             onClick={handleProceed}
-            disabled={!validationResult?.isValid || !allRequiredMapped || saving}
+            disabled={saving}
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
             {saving ? (

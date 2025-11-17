@@ -18,11 +18,11 @@ export interface ValidationResult {
 }
 
 const SYSTEM_FIELDS = [
-  { key: 'Employee_ID', label: 'Employee ID', required: true },
-  { key: 'Team', label: 'Team/Department', required: true },
-  { key: 'Score', label: 'eNPS Score (0-10)', required: true },
+  { key: 'Employee_ID', label: 'Employee ID', required: false },
+  { key: 'Team', label: 'Team/Department', required: false },
+  { key: 'Score', label: 'eNPS Score (0-10)', required: false },
   { key: 'Comments', label: 'Comments', required: false },
-  { key: 'Date', label: 'Survey Date', required: true },
+  { key: 'Date', label: 'Survey Date', required: false },
 ];
 
 export function getSystemFields() {
@@ -131,74 +131,55 @@ export function validateMappedData(
   const warnings: string[] = [];
 
   if (data.length === 0) {
+    warnings.push('No data to validate');
     return {
-      isValid: false,
-      errors: [
-        {
-          rowIndex: -1,
-          field: 'data',
-          value: null,
-          message: 'No data to validate',
-        },
-      ],
+      isValid: true,
+      errors,
       warnings,
     };
   }
 
-  const requiredMappings = SYSTEM_FIELDS.filter((f) => f.required);
-  const missingMappings = requiredMappings.filter(
-    (f) => !mapping[f.key] || mapping[f.key] === null
+  const importantFields = ['Employee_ID', 'Team', 'Score', 'Date'];
+  const missingMappings = importantFields.filter(
+    (f) => !mapping[f] || mapping[f] === null
   );
 
   if (missingMappings.length > 0) {
-    errors.push({
-      rowIndex: -1,
-      field: 'mapping',
-      value: null,
-      message: `Missing required mappings: ${missingMappings.map((m) => m.label).join(', ')}`,
+    const fieldLabels = missingMappings.map(f => {
+      const field = SYSTEM_FIELDS.find(sf => sf.key === f);
+      return field ? field.label : f;
     });
-    return { isValid: false, errors, warnings };
+    warnings.push(`Recommended mappings not set: ${fieldLabels.join(', ')}. Default values will be used.`);
   }
 
   data.forEach((row, index) => {
-    if (mapping.Employee_ID) {
-      const error = validateRequiredField(
-        row[mapping.Employee_ID],
-        'Employee_ID'
-      );
-      if (error) {
-        errors.push({ ...error, rowIndex: index });
-      }
-    }
-
-    if (mapping.Team) {
-      const error = validateRequiredField(row[mapping.Team], 'Team');
-      if (error) {
-        errors.push({ ...error, rowIndex: index });
-      }
-    }
-
     if (mapping.Score) {
-      const error = validateScore(row[mapping.Score]);
-      if (error) {
-        errors.push({ ...error, rowIndex: index });
+      const scoreValue = row[mapping.Score];
+      if (scoreValue !== undefined && scoreValue !== null && scoreValue !== '') {
+        const error = validateScore(scoreValue);
+        if (error) {
+          warnings.push(`Row ${index + 1}: ${error.message}`);
+        }
       }
     }
 
     if (mapping.Date) {
-      const error = validateDate(row[mapping.Date]);
-      if (error) {
-        errors.push({ ...error, rowIndex: index });
+      const dateValue = row[mapping.Date];
+      if (dateValue !== undefined && dateValue !== null && dateValue !== '') {
+        const error = validateDate(dateValue);
+        if (error) {
+          warnings.push(`Row ${index + 1}: ${error.message}`);
+        }
       }
     }
   });
 
   if (!mapping.Comments) {
-    warnings.push('Comments column not mapped - insights may be limited');
+    warnings.push('Comments column not mapped - AI-generated insights may be limited');
   }
 
   return {
-    isValid: errors.length === 0,
+    isValid: true,
     errors,
     warnings,
   };
@@ -208,12 +189,24 @@ export function applyColumnMapping(
   data: any[],
   mapping: Record<string, string | null>
 ): any[] {
-  return data.map((row) => {
+  return data.map((row, index) => {
     const mappedRow: any = {};
 
     Object.entries(mapping).forEach(([systemField, userColumn]) => {
-      if (userColumn) {
+      if (userColumn && row[userColumn] !== undefined) {
         mappedRow[systemField] = row[userColumn];
+      } else {
+        if (systemField === 'Employee_ID') {
+          mappedRow[systemField] = `EMP${String(index + 1).padStart(4, '0')}`;
+        } else if (systemField === 'Team') {
+          mappedRow[systemField] = 'Unknown Team';
+        } else if (systemField === 'Score') {
+          mappedRow[systemField] = 5;
+        } else if (systemField === 'Comments') {
+          mappedRow[systemField] = '';
+        } else if (systemField === 'Date') {
+          mappedRow[systemField] = new Date().toISOString().split('T')[0];
+        }
       }
     });
 
@@ -280,7 +273,7 @@ export function calculateStatistics(
 ): DataStatistics {
   const totalResponses = data.length;
 
-  if (totalResponses === 0 || !mapping.Score) {
+  if (totalResponses === 0) {
     return {
       totalResponses: 0,
       enpsScore: 0,
@@ -296,13 +289,15 @@ export function calculateStatistics(
     };
   }
 
-  const scores = data
-    .map((row) => parseFloat(row[mapping.Score!]))
-    .filter((score) => !isNaN(score) && score >= 0 && score <= 10);
+  const scores = mapping.Score
+    ? data
+        .map((row) => parseFloat(row[mapping.Score!]))
+        .filter((score) => !isNaN(score) && score >= 0 && score <= 10)
+    : data.map(() => 5);
 
   const promoters = scores.filter((score) => score >= 9).length;
   const passives = scores.filter((score) => score >= 7 && score < 9).length;
-  const detractors = scores.filter((score) => score < 7).length;
+  const detractors = scores.filter((score) => score <= 6).length;
 
   const promotersPercent = (promoters / totalResponses) * 100;
   const passivesPercent = (passives / totalResponses) * 100;
@@ -440,19 +435,19 @@ export function calculateDataQuality(
 
   const tips: string[] = [];
   if (completeness < 100) {
-    tips.push('Map all required fields for complete analysis');
+    tips.push('Tip: Map all recommended fields for more complete analysis');
   }
   if (validScores < 95) {
-    tips.push('Review and correct invalid score values (must be 0-10)');
+    tips.push('Tip: Some score values are outside 0-10 range - they will be filtered out');
   }
   if (dateConsistency < 95) {
-    tips.push('Ensure all dates are in a consistent, valid format');
+    tips.push('Tip: Some dates are in inconsistent formats - consider standardizing');
   }
   if (!mapping.Comments) {
-    tips.push('Include comments field for richer insights');
+    tips.push('Tip: Include comments field for richer AI-generated insights');
   }
   if (tips.length === 0) {
-    tips.push('Data quality is excellent!');
+    tips.push('Data quality is excellent! All fields mapped correctly.');
   }
 
   return {
