@@ -343,6 +343,20 @@ function AuthModalIntegrated({
               )}
             </button>
           </div>
+          <div className="text-center pt-4 pb-6"> 
+          <a 
+            href="#" // You can change this link to your AI's website
+            className="flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            By
+            <img 
+              src="/kadosh-ai-icon.png" // This path assumes your icon is in the 'public' folder
+              alt="Kadosh AI" 
+              className="w-5 h-5" // You can adjust the size here
+            />
+            <span className="font-semibold">Kadosh AI</span>
+          </a>
+        </div>
         </form>
       </div>
     </div>
