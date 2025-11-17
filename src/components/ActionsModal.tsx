@@ -74,9 +74,6 @@ export default function ActionsModal({
               <p className="text-slate-600 mb-6">
                 Create actions to track action items for this team
               </p>
-              <button className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors">
-                Create Action
-              </button>
             </div>
           ) : (
             <div className="space-y-6">
