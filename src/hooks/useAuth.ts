@@ -88,21 +88,22 @@ export function useAuth() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        data: {
-          name,
-          company_name: companyName,
-          role,
-        },
-      },
     });
 
     if (error) throw error;
     if (!data.user) throw new Error('Failed to create user');
 
-    if (data.session) {
-      await loadProfile(data.user.id);
-    }
+    const { error: profileError } = await supabase.from('profiles').insert({
+      id: data.user.id,
+      email,
+      name,
+      company_name: companyName,
+      role,
+    });
+
+    if (profileError) throw profileError;
+
+    await loadProfile(data.user.id);
 
     return data;
   };
