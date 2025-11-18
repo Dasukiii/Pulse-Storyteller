@@ -2,6 +2,7 @@ import { ArrowRight, LogIn, BarChart3 } from 'lucide-react';
 import AuthModal from './AuthModal';
 import { useAuth } from '../hooks/useAuth';
 import { useState } from 'react';
+import kadoshIcon from '../kadosh-ai-icon.png';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -15,12 +16,13 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
   const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     name: '',
     companyName: '',
-    role: 'HR Head',
+    role: '',
   });
 
   const handleLoginClick = () => {
@@ -31,14 +33,20 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
     e.preventDefault();
     setAuthError('');
     setAuthLoading(true);
+    setShowEmailConfirmation(false);
 
     try {
       if (mode === 'login') {
         await signIn(formData.email, formData.password);
+        onAuthSuccess();
       } else {
-        await signUp(formData.email, formData.password, formData.name, formData.companyName, formData.role);
+        const result = await signUp(formData.email, formData.password, formData.name, formData.companyName, formData.role);
+        if (result.session) {
+          onAuthSuccess();
+        } else {
+          setShowEmailConfirmation(true);
+        }
       }
-      onAuthSuccess();
     } catch (error: any) {
       setAuthError(error.message || 'An error occurred');
     } finally {
@@ -48,8 +56,15 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700">
-        <header className="container mx-auto px-4 py-6">
+      {/* Google Font Import and Body Style */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap');
+        body {
+          font-family: 'Figtree', sans-serif;
+        }
+      `}</style>
+      <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 font-figtree">
+        <header className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <BarChart3 className="w-8 h-8 text-white" />
@@ -59,7 +74,7 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
             </div>
             <button
               onClick={handleLoginClick}
-              className="flex items-center gap-2 bg-white text-blue-600 hover:bg-blue-50 font-semibold px-6 py-2.5 rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
+              className="flex items-center gap-2 bg-white text-blue-600 hover:bg-blue-50 font-semibold px-6 py-2.5 rounded-xl shadow-lg transition-all duration-200 hover:scale-105"
             >
               <LogIn className="w-4 h-4" />
               Login
@@ -67,18 +82,18 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
           </div>
         </header>
 
-        <div className="container mx-auto px-4 py-20">
+        <div className="container mx-auto px-4 py-24 md:py-32">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-20">
-              <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                Turn eNPS Numbers Into<br />Actionable Stories
+              <h2 className="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+                Turn eNPS Data Into<br />Actionable Stories
               </h2>
               <p className="text-xl md:text-2xl text-blue-100 mb-12 max-w-3xl mx-auto">
-                Transform employee pulse survey data into team-specific narratives and intervention recommendations
+                Insert your eNPS Survey Data to obtain quick story and generate action
               </p>
               <button
                 onClick={onGetStarted}
-                className="inline-flex items-center gap-3 bg-white text-blue-600 hover:bg-blue-50 font-bold text-xl px-12 py-5 rounded-xl shadow-2xl transition-all duration-200 hover:scale-105 hover:shadow-3xl"
+                className="inline-flex items-center gap-3 bg-white text-blue-600 hover:bg-blue-50 font-bold text-xl px-12 py-5 rounded-xl shadow-2xl transition-all duration-200 hover:scale-105 hover:shadow-xl"
               >
                 Get Started
                 <ArrowRight className="w-6 h-6" />
@@ -94,7 +109,7 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
                   Upload Your Data
                 </h3>
                 <p className="text-gray-600 leading-relaxed text-lg">
-                  Import eNPS and pulse survey results in seconds
+                  Import your eNPS and pulse survey results
                 </p>
               </div>
 
@@ -106,7 +121,7 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
                   AI-Powered Stories
                 </h3>
                 <p className="text-gray-600 leading-relaxed text-lg">
-                  Get narrative insights and sentiment analysis per team
+                  Get narrative insights and sentiment analysis
                 </p>
               </div>
 
@@ -115,10 +130,10 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
                   <span className="text-4xl">🎯</span>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  Smart Interventions
+                  Smart Actions
                 </h3>
                 <p className="text-gray-600 leading-relaxed text-lg">
-                  Receive evidence-based action recommendations
+                  Receive action recommendations based on employee's comments
                 </p>
               </div>
             </div>
@@ -136,6 +151,7 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
           onClose={onCloseAuthModal}
           error={authError}
           loading={authLoading}
+          showEmailConfirmation={showEmailConfirmation}
         />
       )}
     </>
@@ -151,6 +167,7 @@ interface AuthModalIntegratedProps {
   onClose: () => void;
   error: string;
   loading: boolean;
+  showEmailConfirmation?: boolean;
 }
 
 function AuthModalIntegrated({
@@ -162,8 +179,8 @@ function AuthModalIntegrated({
   onClose,
   error,
   loading,
+  showEmailConfirmation,
 }: AuthModalIntegratedProps) {
-  const roles = ['HR Head', 'HRBP', 'People Analytics', 'BU Leader'];
 
   const handleChange = (field: string, value: string) => {
     onFormDataChange({ ...formData, [field]: value });
@@ -198,6 +215,20 @@ function AuthModalIntegrated({
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {error}
+            </div>
+          )}
+
+          {showEmailConfirmation && (
+            <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg text-sm">
+              <div className="flex items-start gap-3">
+                <svg className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <div>
+                  <p className="font-medium">Check your email</p>
+                  <p className="mt-1">Confirmation email has been sent to <strong>{formData.email}</strong>. Click the confirmation link to activate your account.</p>
+                </div>
+              </div>
             </div>
           )}
 
@@ -271,19 +302,15 @@ function AuthModalIntegrated({
               <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
                 Role <span className="text-red-500">*</span>
               </label>
-              <select
+              <input
+                type="text"
                 id="role"
                 value={formData.role}
                 onChange={(e) => handleChange('role', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="e.g., HR Manager, People Analytics Lead, etc."
                 required
-              >
-                {roles.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
           )}
 
@@ -317,6 +344,19 @@ function AuthModalIntegrated({
               )}
             </button>
           </div>
+          <div className="text-center pt-4 pb-6"> 
+          <a 
+            href="https://kadoshai.com/" // You can change this link to your AI's website
+            className="flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            By
+            <img 
+              src={kadoshIcon} // This path assumes your icon is in the 'public' folder
+              alt="Kadosh AI" 
+              className="w-36 h-8" // You can adjust the size here
+            />
+          </a>
+        </div>
         </form>
       </div>
     </div>

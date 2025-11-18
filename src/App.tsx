@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useAuth } from './hooks/useAuth';
 import LandingPage from './components/LandingPage';
 import Dashboard from './components/Dashboard';
+import OnboardingWizard from './components/OnboardingWizard';
 
 function App() {
   const { user, profile, loading, signOut } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [onboardingCompleted, setOnboardingCompleted] = useState(false);
 
   const handleGetStarted = () => {
     setShowAuthModal(true);
@@ -18,9 +20,14 @@ function App() {
   const handleLogout = async () => {
     try {
       await signOut();
+      setOnboardingCompleted(false);
     } catch (error) {
       console.error('Error signing out:', error);
     }
+  };
+
+  const handleOnboardingComplete = () => {
+    setOnboardingCompleted(true);
   };
 
   if (loading) {
@@ -35,6 +42,17 @@ function App() {
   }
 
   if (user && profile) {
+    const needsOnboarding = !profile.onboarding_completed && !onboardingCompleted;
+
+    if (needsOnboarding) {
+      return (
+        <OnboardingWizard
+          userId={profile.id}
+          onComplete={handleOnboardingComplete}
+        />
+      );
+    }
+
     return (
       <Dashboard
         userId={profile.id}
