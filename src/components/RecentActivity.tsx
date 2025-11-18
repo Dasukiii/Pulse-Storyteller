@@ -5,7 +5,7 @@ interface Activity {
   id: string;
   title: string;
   date: string;
-  type: 'upload' | 'story' | 'action';
+  type: 'upload' | 'story' | 'intervention';
 }
 
 interface RecentActivityProps {
@@ -20,7 +20,7 @@ export default function RecentActivity({ activities, onViewAll }: RecentActivity
         return '📤';
       case 'story':
         return '📖';
-      case 'action':
+      case 'intervention':
         return '🎯';
     }
   };
@@ -31,8 +31,8 @@ export default function RecentActivity({ activities, onViewAll }: RecentActivity
         return 'Survey Uploaded';
       case 'story':
         return 'Story Generated';
-      case 'action':
-        return 'Action Created';
+      case 'intervention':
+        return 'Intervention Created';
     }
   };
 

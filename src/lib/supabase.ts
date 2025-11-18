@@ -17,9 +17,4 @@ export interface Profile {
   role: string;
   created_at: string;
   updated_at: string;
-  organization_size?: string;
-  primary_challenge?: string;
-  action_plan_preference?: string;
-  onboarding_completed?: boolean;
-  onboarding_completed_at?: string;
 }

@@ -1,6 +1,14 @@
-import { BarChart3, LogOut, Upload, Sparkles, Activity } from 'lucide-react';
+import { BarChart3, User, LogOut, ChevronDown } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
-type NavigationItem = 'dashboard' | 'upload' | 'stories' | 'activity';
+type NavigationItem = 'dashboard' | 'upload' | 'stories' | 'interventions';
 
 interface DashboardHeaderProps {
   userName: string;
@@ -19,23 +27,21 @@ export default function DashboardHeader({
   onNavChange,
   onLogout,
 }: DashboardHeaderProps) {
-  const navItems: { id: NavigationItem; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-    { id: 'upload', label: 'Upload Data', icon: Upload },
-    { id: 'stories', label: 'Stories', icon: Sparkles },
-    { id: 'activity', label: 'Activity', icon: Activity },
+  const navItems: { id: NavigationItem; label: string }[] = [
+    { id: 'dashboard', label: 'Dashboard' },
+    { id: 'upload', label: 'Upload Data' },
+    { id: 'stories', label: 'Stories' },
+    { id: 'interventions', label: 'Interventions' },
   ];
-
-  const initial = userName ? userName.charAt(0).toUpperCase() : '?';
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-3">
-              <BarChart3 className="w-8 h-8 text-blue-600" />
-              <h1 className="text-xl font-semibold text-gray-900 hidden sm:block">
+              <BarChart3 className="w-7 h-7 text-blue-600" />
+              <h1 className="text-xl font-bold text-gray-900 hidden sm:block">
                 Leaders Pulse StoryTeller
               </h1>
             </div>
@@ -45,13 +51,12 @@ export default function DashboardHeader({
                 <button
                   key={item.id}
                   onClick={() => onNavChange(item.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     activeNav === item.id
                       ? 'bg-blue-50 text-blue-700'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                   }`}
                 >
-                  <item.icon className="w-4 h-4" />
                   {item.label}
                 </button>
               ))}
@@ -59,25 +64,36 @@ export default function DashboardHeader({
           </div>
 
           <div className="flex items-center gap-4">
-            {/* subtle avatar (non-interactive) */}
-            <div
-              className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold text-base"
-              aria-hidden
-              title={userName}
-            >
-              {initial}
-            </div>
-
-            {/* single Logout button, red-themed & clear styling */}
-            <button
-              onClick={onLogout}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-red-600 bg-red-50 border border-red-100 hover:bg-red-100 transition-colors"
-              aria-label="Logout"
-              title="Logout"
-            >
-              <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline">Logout</span>
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold text-sm">
+                  {userName.charAt(0).toUpperCase()}
+                </div>
+                <div className="hidden sm:block text-left">
+                  <p className="text-sm font-medium text-gray-900">{userName}</p>
+                  <p className="text-xs text-gray-500">{userRole}</p>
+                </div>
+                <ChevronDown className="w-4 h-4 text-gray-400" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium text-gray-900">{userName}</p>
+                    <p className="text-xs text-gray-500">{userEmail}</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <User className="w-4 h-4 mr-2" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={onLogout}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
