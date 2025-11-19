@@ -99,7 +99,7 @@ Return ONLY a valid JSON object with a "teams" array (no markdown, no extra text
     const maxTokens = Math.min(4000, teamsData.length * tokensPerTeam + 300);
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages: [
         {
           role: 'system',
@@ -245,7 +245,7 @@ Return ONLY a valid JSON object with an "interventions" array (no markdown, no e
 }`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages: [
         {
           role: 'system',
