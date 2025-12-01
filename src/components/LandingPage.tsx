@@ -25,8 +25,27 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
     role: '',
   });
 
+  // NEW: PDPA acceptance state - required for sign up
+  const [acceptedPDPA, setAcceptedPDPA] = useState(false);
+
   const handleLoginClick = () => {
     onGetStarted();
+  };
+
+  // When switching modes, reset PDPA acceptance
+  const handleModeChange = (newMode: 'login' | 'signup') => {
+    setMode(newMode);
+    setAuthError('');
+    setShowEmailConfirmation(false);
+    setAcceptedPDPA(false);
+  };
+
+  // When closing modal, also reset PDPA to avoid stale consent for next open
+  const handleCloseModal = () => {
+    setAcceptedPDPA(false);
+    setAuthError('');
+    setShowEmailConfirmation(false);
+    onCloseAuthModal();
   };
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
@@ -36,22 +55,37 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
     setShowEmailConfirmation(false);
 
     try {
+      // Enforce PDPA acceptance for sign up
+      if (mode === 'signup' && !acceptedPDPA) {
+        setAuthError('You must accept the PDPA / privacy policy to create an account.');
+        setAuthLoading(false);
+        return;
+      }
+
       if (mode === 'login') {
         await signIn(formData.email, formData.password);
         onAuthSuccess();
       } else {
         const result = await signUp(formData.email, formData.password, formData.name, formData.companyName, formData.role);
         if (result.session) {
+          // successful immediate session
+          setAcceptedPDPA(false);
           onAuthSuccess();
         } else {
+          // sign-up that requires email confirmation
           setShowEmailConfirmation(true);
+          // keep acceptedPDPA flagged until user closes modal (we already reset when closing)
         }
       }
     } catch (error: any) {
-      setAuthError(error.message || 'An error occurred');
+      setAuthError(error?.message || 'An error occurred');
     } finally {
       setAuthLoading(false);
     }
+  };
+
+  const handleChange = (field: string, value: string) => {
+    setFormData({ ...formData, [field]: value });
   };
 
   return (
@@ -146,12 +180,14 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
           mode={mode}
           formData={formData}
           onFormDataChange={setFormData}
-          onModeChange={setMode}
+          onModeChange={handleModeChange}
           onSubmit={handleAuthSubmit}
-          onClose={onCloseAuthModal}
+          onClose={handleCloseModal}
           error={authError}
           loading={authLoading}
           showEmailConfirmation={showEmailConfirmation}
+          acceptedPDPA={acceptedPDPA}
+          onAcceptedPDPAChange={setAcceptedPDPA}
         />
       )}
     </>
@@ -168,6 +204,8 @@ interface AuthModalIntegratedProps {
   error: string;
   loading: boolean;
   showEmailConfirmation?: boolean;
+  acceptedPDPA: boolean;
+  onAcceptedPDPAChange: (b: boolean) => void;
 }
 
 function AuthModalIntegrated({
@@ -180,6 +218,8 @@ function AuthModalIntegrated({
   error,
   loading,
   showEmailConfirmation,
+  acceptedPDPA,
+  onAcceptedPDPAChange,
 }: AuthModalIntegratedProps) {
 
   const handleChange = (field: string, value: string) => {
@@ -311,6 +351,20 @@ function AuthModalIntegrated({
                 placeholder="e.g., HR Manager, People Analytics Lead, etc."
                 required
               />
+
+              {/* PDPA checkbox required for signup */}
+              <div className="mt-4 flex items-start gap-3">
+                <input
+                  id="pdpa-modal"
+                  type="checkbox"
+                  checked={acceptedPDPA}
+                  onChange={(e) => onAcceptedPDPAChange(e.target.checked)}
+                  className="mt-1 accent-blue-500 w-4 h-4 rounded"
+                />
+                <label htmlFor="pdpa-modal" className="text-sm text-gray-600">
+                  I agree to the <a href="/privacy" target="_blank" rel="noreferrer" className="text-blue-600 underline">PDPA / privacy policy</a> and consent to my data being used for account creation and service personalization.
+                </label>
+              </div>
             </div>
           )}
 
@@ -344,19 +398,20 @@ function AuthModalIntegrated({
               )}
             </button>
           </div>
-          <div className="text-center pt-4 pb-6"> 
-          <a 
-            href="https://kadoshai.com/" // You can change this link to your AI's website
-            className="flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            By
-            <img 
-              src={kadoshIcon} // This path assumes your icon is in the 'public' folder
-              alt="Kadosh AI" 
-              className="w-36 h-8" // You can adjust the size here
-            />
-          </a>
-        </div>
+
+          <div className="text-center pt-4 pb-6">
+            <a
+              href="https://kadoshai.com/"
+              className="flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              By
+              <img
+                src={kadoshIcon}
+                alt="Kadosh AI"
+                className="w-36 h-8 object-contain"
+              />
+            </a>
+          </div>
         </form>
       </div>
     </div>
