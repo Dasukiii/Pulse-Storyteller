@@ -1,13 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
 import LandingPage from './components/LandingPage';
 import Dashboard from './components/Dashboard';
 import OnboardingWizard from './components/OnboardingWizard';
+import PrivacyPolicyPage from './components/PrivacyPolicyPage';
 
 function App() {
   const { user, profile, loading, signOut } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [onboardingCompleted, setOnboardingCompleted] = useState(false);
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateTo = (path: string) => {
+    window.history.pushState({}, '', path);
+    setCurrentPath(path);
+  };
 
   const handleGetStarted = () => {
     setShowAuthModal(true);
@@ -29,6 +44,10 @@ function App() {
   const handleOnboardingComplete = () => {
     setOnboardingCompleted(true);
   };
+
+  if (currentPath === '/privacy') {
+    return <PrivacyPolicyPage onBack={() => navigateTo('/')} />;
+  }
 
   if (loading) {
     return (

@@ -173,6 +173,28 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
             </div>
           </div>
         </div>
+
+        <footer className="container mx-auto px-4 py-12 mt-12 border-t border-white/20">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-2 text-white/80">
+              <span className="text-sm">Powered by</span>
+              <a href="https://kadoshai.com/" target="_blank" rel="noreferrer" className="hover:opacity-80 transition-opacity">
+                <img src={kadoshIcon} alt="Kadosh AI" className="h-7 object-contain brightness-0 invert" />
+              </a>
+            </div>
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+              <a
+                href="/privacy"
+                className="text-sm text-white/80 hover:text-white transition-colors underline"
+              >
+                PDPA Policy
+              </a>
+              <p className="text-sm text-white/80">
+                2026 Leaders Pulse StoryTeller. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </footer>
       </div>
 
       {showAuthModal && (
