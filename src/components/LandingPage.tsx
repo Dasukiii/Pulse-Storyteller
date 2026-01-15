@@ -426,7 +426,7 @@ function AuthModalIntegrated({
               href="https://kadoshai.com/"
               className="flex items-center justify-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
             >
-              By
+              Powered by
               <img
                 src={kadoshIcon}
                 alt="Kadosh AI"
