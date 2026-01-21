@@ -1,4 +1,4 @@
-import { ArrowRight, LogIn, BarChart3 } from 'lucide-react';
+import { ArrowRight, BarChart3, LogIn } from 'lucide-react';
 import AuthModal from './AuthModal';
 import { useAuth } from '../hooks/useAuth';
 import { useState } from 'react';
@@ -99,20 +99,13 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
       `}</style>
       <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 font-figtree">
         <header className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center">
             <div className="flex items-center gap-3">
-              <BarChart3 className="w-8 h-8 text-white" />
-              <h1 className="text-2xl font-bold text-white">
+              <BarChart3 className="w-8 h-8 text-white drop-shadow-lg" />
+              <h1 className="text-2xl font-bold text-white drop-shadow-lg bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent animate-pulse">
                 Leaders Pulse StoryTeller
               </h1>
             </div>
-            <button
-              onClick={handleLoginClick}
-              className="flex items-center gap-2 bg-white text-blue-600 hover:bg-blue-50 font-semibold px-6 py-2.5 rounded-xl shadow-lg transition-all duration-200 hover:scale-105"
-            >
-              <LogIn className="w-4 h-4" />
-              Login
-            </button>
           </div>
         </header>
 
@@ -135,8 +128,8 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-105">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] group">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 shadow-lg group-hover:shadow-blue-400/50 group-hover:shadow-xl transition-shadow duration-300">
                   <span className="text-4xl">📊</span>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
@@ -147,8 +140,8 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
                 </p>
               </div>
 
-              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-105">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(168,85,247,0.5)] group">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 shadow-lg group-hover:shadow-purple-400/50 group-hover:shadow-xl transition-shadow duration-300">
                   <span className="text-4xl">🤖</span>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
@@ -159,8 +152,8 @@ export default function LandingPage({ onGetStarted, showAuthModal, onCloseAuthMo
                 </p>
               </div>
 
-              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-105">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] group">
+                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6 shadow-lg group-hover:shadow-emerald-400/50 group-hover:shadow-xl transition-shadow duration-300">
                   <span className="text-4xl">🎯</span>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">

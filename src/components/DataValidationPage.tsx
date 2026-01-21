@@ -337,9 +337,9 @@ export default function DataValidationPage({
                 : 'border-red-200 bg-red-50'
             }`}>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center justify-between">
                   <span>Data Quality</span>
-                  <span className={`text-lg font-bold ${
+                  <span className={`text-xl font-bold ${
                     dataQuality.rating === 'Excellent' || dataQuality.rating === 'Good'
                       ? 'text-green-700'
                       : dataQuality.rating === 'Fair'
@@ -350,15 +350,15 @@ export default function DataValidationPage({
                   </span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
+                  <div className="flex justify-between text-base">
                     <span className="text-gray-700">Overall Score</span>
-                    <span className="font-semibold">{dataQuality.score}%</span>
+                    <span className="font-semibold text-lg">{dataQuality.score}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-gray-200 rounded-full h-3">
                     <div
-                      className={`h-2 rounded-full ${
+                      className={`h-3 rounded-full ${
                         dataQuality.score >= 80
                           ? 'bg-green-600'
                           : dataQuality.score >= 60
@@ -370,7 +370,7 @@ export default function DataValidationPage({
                   </div>
                 </div>
 
-                <div className="text-xs space-y-1 pt-2 border-t">
+                <div className="text-sm space-y-2 pt-3 border-t">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Completeness</span>
                     <span className="font-medium">{dataQuality.completeness}%</span>
@@ -386,10 +386,10 @@ export default function DataValidationPage({
                 </div>
 
                 <div className="pt-3 border-t">
-                  <p className="text-xs font-semibold text-gray-700 mb-2">Tips:</p>
-                  <ul className="space-y-1">
+                  <p className="text-sm font-semibold text-gray-700 mb-2">Tips:</p>
+                  <ul className="space-y-1.5">
                     {dataQuality.tips.map((tip, index) => (
-                      <li key={index} className="text-xs text-gray-600">
+                      <li key={index} className="text-sm text-gray-600">
                         • {tip}
                       </li>
                     ))}
