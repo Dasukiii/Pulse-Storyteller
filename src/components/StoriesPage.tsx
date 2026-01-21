@@ -10,7 +10,6 @@ import type { Story, Sentiment, Action } from '../lib/types';
 import ActionsModal from './ActionsModal';
 import StoryModal from './StoryModal';
 import { exportStoryAsPDF } from '../lib/pdfExport';
-import AILoader from './AILoader';
 
 type SortOption = 'score-desc' | 'score-asc' | 'name-asc' | 'date-desc' | 'date-asc';
 type TimeFilter = 'all' | 'today' | 'week' | 'month';
@@ -456,8 +455,8 @@ export default function StoriesPage() {
                     >
                       {generatingActions === story.id ? (
                         <>
-                          <AILoader size="sm" />
-                          <span className="ml-1">Generating...</span>
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Generating...
                         </>
                       ) : (
                         <>

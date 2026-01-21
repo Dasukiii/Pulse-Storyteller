@@ -8,6 +8,7 @@ import UploadPage from './UploadPage';
 import DataValidationPage from './DataValidationPage';
 import StoriesPage from './StoriesPage';
 import ActivityPage from './ActivityPage';
+import AILoader from './AILoader';
 import { Users, FileText, Sparkles, Upload, AlertCircle } from 'lucide-react';
 import { getUploads, getStories, getActions, getDashboardStats } from '../lib/data';
 import type { Upload as UploadType, Story, Intervention } from '../lib/types';
@@ -437,7 +438,9 @@ export default function Dashboard({
         {generatingStories && (
           <div className="max-w-4xl mx-auto">
             <div className="bg-white rounded-xl border border-gray-200 p-12 shadow-sm text-center">
-              <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+              <div className="flex justify-center mb-6">
+                <AILoader size="lg" />
+              </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Generating Your Stories</h2>
               <p className="text-gray-600 mb-8">
                 Our AI is analyzing your data and creating personalized insights for all teams. This may take a minute...
